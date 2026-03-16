@@ -221,12 +221,14 @@
 
 
 
+/* Жалпы навигация стилі */
+/* Жалпы навигация стилі */
 nav {
     position: fixed;
     top: 0;
     width: 100%;
-    padding: 10px 5%;
-    background: rgba(0, 0, 0, 0.9);
+    padding: 10px 3%; /* Шетінен орынды сәл азайттық */
+    background: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(15px);
     border-bottom: 2px solid var(--primary);
     z-index: 1000;
@@ -234,28 +236,47 @@ nav {
 
 .nav-container {
     display: flex;
-    justify-content: space-between; /* Элементтерді жан-жаққа созады */
+    justify-content: space-between; /* Элементтерді үш жаққа тең бөлу */
     align-items: center;
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+/* Логотиптер (Буях және ФФ) */
 .nav-logo-img {
-    height: 35px; /* Логотиптің биіктігі (өзіңе ыңғайлап өзгерт) */
+    height: 30px; /* Компьютердегі биіктігі */
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 0 5px var(--primary)); /* Логотипке неонды жарық береді */
 }
 
-/* Мобильді телефонда логотиптерді сәл кішірейту */
+/* Ортадағы ALASH жазуы */
+.logo {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 18px; /* Компьютерде */
+    color: var(--primary);
+    letter-spacing: 3px;
+    text-decoration: none;
+    font-weight: 900;
+}
+
+/* 🔥 ТЕЛЕФОНҒА АРНАЛҒАН АДАПТАЦИЯ 🔥 */
 @media (max-width: 600px) {
-    .nav-logo-img {
-        height: 25px;
+    nav {
+        padding: 8px 2%; /* Орынды барынша үнемдеу */
     }
+
+    .nav-logo-img {
+        height: 20px; /* Телефонда логотиптерді кішірейтеміз */
+    }
+
     .logo {
-        font-size: 16px;
-        letter-spacing: 3px;
+        font-size: 14px; /* Телефонда жазуды кішірейтеміз */
+        letter-spacing: 2px; /* Әріп арасын қысамыз */
+    }
+
+    .nav-container {
+        gap: 5px; /* Элементтер арасындағы бос орынды азайту */
     }
 }
 
@@ -784,6 +805,7 @@ nav {
                     <div class="st-item"><h4>K/D RATIO</h4><p id="m-kd"></p></div>
                     <div class="st-item"><h4>WIN RATE</h4><p id="m-win"></p></div>
                     <div class="st-item"><h4>DEVICE</h4><p id="m-dev"></p></div>
+                    <div class="st-item"><h4>LEVEL</h4><p id="m-lvl"></p></div>
                     <div class="st-item"><h4>CATEGORY</h4><p id="m-cat" style="text-transform:uppercase;"></p></div>
                 </div>
             </div>
@@ -817,12 +839,12 @@ nav {
     <section class="founder-section">
     <div class="founder-container">
         <div class="founder-photo">
-            <img src="images/player.jpg" alt="Founder" onerror="this.src='https://via.placeholder.com/500x700?text=DAMIR'">
+            <img src="images/leader.jpg" alt="Founder" onerror="this.src='https://via.placeholder.com/500x700?text=DAMIR'">
         </div>
         
         <div class="founder-text">
-            <h4 class="f-label">FOUNDER & CEO</h4>
-            <h2 class="f-name">DAMIR</h2>
+            <h4 class="f-label">ОСНОВАТЕЛЬ ГИЛЬДИИ</h4>
+            <h2 class="f-name">MEYA</h2>
             <p class="f-desc">
                 Основатель и главный лидер киберспортивной организации <b>ALASH</b>. 
                 Человек, стоящий у истоков создания одного из самых перспективных эсквадов. 
@@ -830,7 +852,7 @@ nav {
             </p>
             <div class="f-stats">
                 <div class="f-stat-item"><span>Опыт:</span> 5 лет</div>
-                <div class="f-stat-item"><span>Роль:</span> IGL / Sniper</div>
+                <div class="f-stat-item"><span>Роль:</span> Основатель и главный лидер</div>
             </div>
             <div class="f-socials">
                 <p>Связь с лидером:</p>
@@ -897,8 +919,8 @@ function hidePreloader() {
        
       // БАСШЫЛАР БАЗАСЫ
 const admins = [
-    {id:'a1', nick:'DAMIR', role:'LEADER', cat:'kv', kd:'3.50', win:'85%', dev:'iPhone 15 Pro', img:'images/damir.jpg'},
-    {id:'a2', nick:'BOSS', role:'ВР. ЛИДЕР', cat:'kv', kd:'3.10', win:'75%', dev:'iPhone', img:'images/boss.jpg'},
+    {id:'a1', nick:'ASH MEYA', role:'ЛИДЕР ГИЛЬДИ', cat:'kv', kd:'3.50', win:'85%', dev:'iPhone 16', lvl:'75', img:'images/leader.jpg'},
+    {id:'a2', nick:'BOSS', role:'ВР. ЛИДЕР', cat:'kv', kd:'3.10', win:'75%', dev:'iPhone', img:'images/aruka.jpg'},
     {id:'a3', nick:'OFFICER_1', role:'ОФИЦЕР', cat:'sns', kd:'2.90', win:'65%', dev:'iPad', img:'images/off1.jpg'},
     {id:'a4', nick:'OFFICER_2', role:'ОФИЦЕР', cat:'bo', kd:'2.70', win:'60%', dev:'RedMagic', img:'images/off2.jpg'}
 ]; 
@@ -906,7 +928,7 @@ const admins = [
        // БАЗА ДАННЫХ - Мұнда 4-тен көп адам болса ғана "ЕЩЕ" батырмасы көрінеді
         const players = [
             {id:'damir', nick:'DAMIR', role:'FOUNDER / SNIPER', cat:'kv', kd:'3.50', win:'85%', dev:'iPhone 15 Pro', img:'images/player.jpg'},
-            {id:'esen', nick:'ALASH_ESEN', role:'RUSHER', cat:'sns', kd:'2.80', win:'65%', dev:'iPad Pro', img:'images/esen.jpg'},
+            {id:'esen', nick:'ALASH_ESEN', role:'RUSHER', cat:'sns', kd:'2.80', win:'65%', dev:'iPad Pro', img:'images/aruka.jpg'},
             {id:'khan', nick:'ALASH_KHAN', role:'SUPPORT', cat:'bo', kd:'2.10', win:'50%', dev:'RedMagic', img:'images/khan.jpg'},
             {id:'ultra', nick:'ULTRA_BOY', role:'ULTIMATUM', cat:'ultra', kd:'4.50', win:'95%', dev:'PC', img:'images/ultra.jpg'},
             // ТЕКСЕРУ ҮШІН 5-ШІ ОЙЫНШЫНЫ ҚОСЫП ҚОЙДЫМ (Сонда БАТЫРМА ШЫҒАДЫ)
@@ -950,8 +972,11 @@ function openAdminModal(id) {
         document.getElementById('m-cat').innerText = p.cat;
         document.getElementById('m-img').src = p.img;
         document.getElementById('pModal').style.display = 'flex';
-    }
+        document.getElementById('m-lvl').innerText = p.lvl; 
+        
+        }
 }
+   
 
 // ОСЫНЫ ҚОСУДЫ ҰМЫТПА (renderCards-тың қасына):
 renderAdmins();
