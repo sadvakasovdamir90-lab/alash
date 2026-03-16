@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ALASH ESPORTS | OFFICIAL HUB</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #fcee0a;
+            --accent: #ff003c;
+            --bg: #050505;
+            --card: #111;
+            /* Фон images папкасында болса: images/bg.jpg */
+            --bg-img: url('https://images8.alphacoders.com/105/1053426.jpg'); 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+
+       .fixed-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    /* images папкасындағы bg_photo.jpg деген файлды қолдану */
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)), url('images/bg_photo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Скролл жасағанда фото орнында тұрады */
+}
+
+
+
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 15px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(15px);
+            border-bottom: 2px solid var(--primary); z-index: 1000;
+        }
+        .logo { font-family: 'Syncopate', sans-serif; font-size: 20px; color: var(--primary); letter-spacing: 5px; text-decoration: none; }
+
+        .hero { height: 35vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; margin-top: 60px; }
+        .hero h1 { font-family: 'Syncopate', sans-serif; font-size: clamp(35px, 10vw, 80px); color: #fff; text-shadow: 0 0 15px var(--primary); }
+
+        /* Категориялар (Шрифттер жаңартылды) */
+        .filter-tabs { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; padding: 15px; position: sticky; top: 60px; background: rgba(5,5,5,0.9); z-index: 900; }
+        .f-btn { 
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(252, 238, 10, 0.3); color: #fff; 
+            padding: 10px 18px; font-family: 'Orbitron'; font-size: 11px; font-weight: 900; 
+            letter-spacing: 3px; cursor: pointer; transition: 0.3s; 
+            clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
+        }
+        .f-btn.active { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
+
+        /* Roster Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; padding: 20px 5%; }
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
+            .card { height: 300px !important; }
+            .p-nick { font-size: 16px !important; }
+        }
+
+        /* Жаңартылған Фигуралы Карточка */
+        .card { 
+    background: var(--card); 
+    height: 420px; 
+    position: relative; 
+    overflow: hidden; 
+    border: 1px solid rgba(255,255,255,0.05); 
+    cursor: pointer; 
+    transition: 0.4s;
+    /* Фигуралы қиықты (clip-path) алып тастап, бұрыштарын түзу жасадық */
+    border-radius: 8px; 
+}
+
+.card:hover { 
+    border-color: var(--primary); 
+    transform: translateY(-8px); 
+    box-shadow: 0 0 25px rgba(252, 238, 10, 0.25); 
+}
+
+.p-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    object-position: top; 
+    opacity: 0.7; 
+    transition: 0.5s; 
+}
+
+.card:hover .p-img { 
+    opacity: 1; 
+    transform: scale(1.05); 
+}
+
+.p-info { 
+    position: absolute; 
+    bottom: 0; 
+    width: 100%; 
+    padding: 15px; 
+    background: linear-gradient(transparent, rgba(0,0,0,0.9)); 
+}
+
+.p-nick { 
+    font-family: 'Orbitron'; 
+    font-size: 20px; 
+    color: var(--primary); 
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+}
+
+.p-role { 
+    font-size: 10px; 
+    color: #888; 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+}
+
+        /* БРЕНДТІК ПАНЕЛЬ (ALASH ЖАЗУЫМЕН) */
+        .modal-brand {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 22px;
+            color: var(--primary);
+            text-align: center;
+            letter-spacing: 8px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(252, 238, 10, 0.2);
+            text-shadow: 0 0 10px rgba(252, 238, 10, 0.5);
+            width: 100%;
+        }
+
+        /* Modal Player Stats */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal-box { background: #111; border: 2px solid var(--primary); width: 100%; max-width: 700px; display: flex; position: relative; animation: zoom 0.3s; border-radius: 0 20px 0 20px; }
+        @keyframes zoom { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        .m-img-side { width: 40%; background: #000; height: 100%; }
+        .m-img-side img { width: 100%; height: 100%; object-fit: cover; }
+        .m-info-side { width: 60%; padding: 30px; }
+
+        @media (max-width: 700px) { 
+            .modal-box { flex-direction: column; max-height: 90vh; overflow-y: auto; } 
+            .m-img-side { width: 100%; height: 250px; }
+            .m-info-side { width: 100%; padding: 20px; } 
+        }
+
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .st-item { background: rgba(255,255,255,0.03); padding: 12px; border-left: 3px solid var(--primary); }
+        .st-item h4 { font-size: 9px; color: var(--primary); }
+        .st-item p { font-family: 'Orbitron'; font-size: 16px; font-weight: 700; }
+
+
+/* ЕЩЕ */
+
+        .more-players-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.btn-more {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 12px 40px;
+    font-family: 'Orbitron';
+    font-weight: 900;
+    cursor: pointer;
+    transition: 0.3s;
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    display: none; /* Басында жасырулы тұрады, JS арқылы шығады */
+}
+
+.btn-more:hover {
+    background: var(--primary);
+    color: #000;
+    box-shadow: 0 0 20px var(--primary);
+}
+
+        /* Buttons & Forms */
+        .actions { padding: 40px 5%; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+        .btn { width: 100%; max-width: 400px; padding: 18px; font-family: 'Orbitron'; font-weight: 900; border: none; cursor: pointer; transition: 0.3s; clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%); letter-spacing: 2px; }
+        .btn-y { background: var(--primary); color: #000; }
+        .btn-r { background: var(--accent); color: #fff; }
+        
+        input { width: 100%; padding: 14px; background: #1a1a1a; border: 1px solid #333; color: #fff; margin-bottom: 10px; font-family: 'Rajdhani'; font-size: 16px; }
+        .close { position: absolute; top: 10px; right: 15px; font-size: 25px; color: var(--accent); cursor: pointer; z-index: 10; }
+   
+
+#vipGrid .card {
+    border: 1px solid rgba(252, 238, 10, 0.4);
+    box-shadow: 0 0 15px rgba(252, 238, 10, 0.1);
+}
+.p-role.admin {
+    color: var(--primary) !important;
+    font-weight: 900;
+}
+
+
+.video-bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Барлық элементтердің астында тұруы үшін */
+    overflow: hidden;
+}
+
+.video-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Видео экранды толық жауып тұруы үшін */
+    filter: brightness(40%); /* Мәтіндер жақсы көріну үшін видеоны сәл қараңғылау */
+}
+
+
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 10px 5%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(15px);
+    border-bottom: 2px solid var(--primary);
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between; /* Элементтерді жан-жаққа созады */
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nav-logo-img {
+    height: 35px; /* Логотиптің биіктігі (өзіңе ыңғайлап өзгерт) */
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 5px var(--primary)); /* Логотипке неонды жарық береді */
+}
+
+/* Мобильді телефонда логотиптерді сәл кішірейту */
+@media (max-width: 600px) {
+    .nav-logo-img {
+        height: 25px;
+    }
+    .logo {
+        font-size: 16px;
+        letter-spacing: 3px;
+    }
+}
+
+
+
+.founder-section {
+    padding: 80px 5%;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1.2s ease;
+}
+
+.founder-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.founder-container {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 100%);
+    border: 1px solid rgba(252, 238, 10, 0.1);
+    padding: 50px;
+    border-radius: 4px; /* 4 бұрышты стиль */
+    backdrop-filter: blur(10px);
+}
+
+.founder-photo img {
+    width: 320px;
+    height: 450px;
+    object-fit: cover;
+    border: 1px solid var(--primary);
+    filter: grayscale(30%);
+    transition: 0.5s;
+}
+
+.founder-photo img:hover { filter: grayscale(0%); box-shadow: 0 0 30px rgba(252, 238, 10, 0.2); }
+
+.founder-text { flex: 1; }
+.f-label { color: var(--primary); letter-spacing: 5px; font-size: 12px; margin-bottom: 15px; }
+.f-name { font-family: 'Syncopate'; font-size: 45px; margin-bottom: 25px; color: #fff; }
+.f-desc { color: #aaa; line-height: 1.8; font-size: 16px; margin-bottom: 30px; max-width: 600px; }
+
+.f-stats { display: flex; gap: 15px; margin-bottom: 30px; }
+.f-stat-item { background: rgba(255, 255, 255, 0.05); padding: 8px 15px; border-radius: 2px; font-size: 13px; border-left: 2px solid var(--primary); }
+.f-stat-item span { color: var(--primary); margin-right: 5px; }
+
+.f-link { color: var(--primary); text-decoration: none; border: 1px solid var(--primary); padding: 5px 15px; margin-right: 10px; font-size: 12px; transition: 0.3s; }
+.f-link:hover { background: var(--primary); color: #000; }
+
+/* ТЕЛЕФОНҒА АДАПТАЦИЯ */
+@media (max-width: 800px) {
+    .founder-container { flex-direction: column; text-align: center; padding: 30px 15px; }
+    .founder-photo img { width: 100%; height: 400px; }
+    .f-name { font-size: 32px; }
+    .f-stats { justify-content: center; }
+}
+
+
+
+.hero {
+    height: auto !important; /* Биіктікті толық алып тастаймыз */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Барынша төбеге тақау */
+    text-align: center;
+    /* ҚАРА ПАНЕЛЬГЕ ТАҚАУ ҮШІН: */
+    margin-top: 10px; /* Осы санды азайтсаң (мысалы 5px), тіпті жақындай түседі */
+    padding: 0;
+}
+
+.hero-brand-wrap {
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
+.main-title {
+    font-family: 'Syncopate', sans-serif;
+    font-size: clamp(50px, 12vw, 110px);
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 15px;
+    text-transform: uppercase;
+    line-height: 0.6; /* Жазудың өз биіктігін қысқарту */
+    margin-bottom: 0 !important;
+    text-shadow: 0 0 15px rgba(252, 238, 10, 0.4);
+}
+
+.main-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px; /* ALASH-қа барынша жақындату */
+    left: 10%; /* Орталау */
+    width: 80%; /* Ені */
+    height: 6px; /* Биіктігі */
+    background: var(--primary); /* Негізгі түс */
+    
+    /* 🔥 ӨТКІР ФИГУРА (Clip-Path) 🔥 */
+    /* Бұл фигура екі шетін қиғаш, өткір қылады */
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    
+    /* ЖЫЛТЫР ЭФФЕКТІ (Glow) */
+    box-shadow: 
+        0 0 10px var(--primary),
+        0 0 30px var(--primary),
+        0 0 60px rgba(252, 238, 10, 0.6);
+}
+
+.main-subtitle {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    color: var(--primary);
+    letter-spacing: 8px;
+    /* ЕКІ МӘТІНДІ ЖАБЫСТЫРУ: */
+    margin-top: 12px !important; 
+    font-weight: 900;
+    opacity: 1;
+    text-transform: uppercase;
+}
+
+/* Жазудың баяу жыпылықтау анимациясы */
+@keyframes title-glow {
+    from { text-shadow: 0 0 20px rgba(252, 238, 10, 0.4); }
+    to { text-shadow: 0 0 50px rgba(252, 238, 10, 0.8); }
+}
+
+/* Мобильді телефонға арналған түзету */
+@media (max-width: 600px) {
+    .main-title {
+        letter-spacing: 10px;
+        font-size: 50px;
+    }
+    .main-subtitle {
+        font-size: 10px;
+        letter-spacing: 5px;
+    }
+}
+
+.hero-brand-wrap {
+    position: relative;
+    padding: 20px;
+    margin-top: -710px; /* Осы санды өзгерт: -100px қылсаң тіпті жоғары кетеді */
+}
+
+.hero {
+    height: 30vh; /* 50vh-тан 30vh-қа азайттық, сонда жазу жоғары көтеріледі */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 350px; /* Төбесінен қанша орын қалу керек екенін осымен ретте */
+}
+
+
+
+.pro-partners {
+    padding: 50px 5%;
+    background: rgba(0, 0, 0, 0.3); /* Фон сәл мөлдір */
+    text-align: center;
+    border-top: 1px solid rgba(252, 238, 10, 0.05);
+}
+
+.pro-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #666;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+.partner-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 35px;
+    flex-wrap: wrap; /* Телефонда екінші қатарға түсу үшін */
+}
+
+.partner-row img {
+    height: 30px; /* Биіктігі жинақы */
+    width: auto;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); /* Суреттер анық көріну үшін */
+}
+
+.partner-row img:hover {
+    transform: scale(1.1); /* Тінтуірді апарғанда сәл үлкейеді */
+}
+
+.partner-divider {
+    width: 2px;
+    height: 25px;
+    background: rgba(252, 238, 10, 0.2);
+}
+
+.partner-brand {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: 4px;
+    text-shadow: 0 0 10px rgba(252, 238, 10, 0.3);
+}
+
+/* МОБИЛЬДІ ТҮРІ */
+@media (max-width: 600px) {
+    .partner-row { gap: 20px; }
+    .partner-row img { height: 22px; }
+    .partner-divider { display: none; } /* Телефонда сызық керек емес */
+}
+
+
+.live-recruitment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 15px 5%;
+    background: rgba(252, 238, 10, 0.05); /* Неонды сары түс өте көмескі */
+    border-top: 1px solid rgba(252, 238, 10, 0.1);
+    border-bottom: 1px solid rgba(252, 238, 10, 0.1);
+    font-family: 'Orbitron', sans-serif;
+    margin: 20px 0;
+}
+
+/* Жыпылықтап тұратын жасыл нүкте */
+.dot {
+    height: 8px;
+    width: 8px;
+    background-color: #2ecc71;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 0 10px #2ecc71;
+    animation: blink 1.5s infinite;
+}
+
+.status-text {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #2ecc71;
+    font-weight: 900;
+}
+
+.slots-counter {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+#slot-count {
+    color: var(--primary);
+    font-weight: 900;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* Мобильді телефонда */
+@media (max-width: 600px) {
+    .live-recruitment {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Барлық элементтің үстінде тұрады */
+    transition: opacity 0.8s ease, visibility 0.8s;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.loader-logo {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 50px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 15px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px var(--primary);
+    animation: pulse 1.5s infinite;
+}
+
+.loader-bar {
+    width: 250px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress {
+    width: 0%;
+    height: 100%;
+    background: var(--primary);
+    box-shadow: 0 0 15px var(--primary);
+    animation: load-progress 2s forwards;
+}
+
+.loader-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    color: var(--primary);
+    margin-top: 15px;
+    letter-spacing: 5px;
+}
+
+/* Анимациялар */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+@keyframes load-progress {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+/* Сайт жүктелгенде өшетін класс */
+.loader-fade {
+    opacity: 0;
+    visibility: hidden;
+}
+
+
+.about-section {
+    padding: 100px 5%;
+    background: linear-gradient(to right, rgba(252, 238, 10, 0.02), transparent);
+}
+
+.about-container {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-content { flex: 1; }
+
+.about-label {
+    color: var(--primary);
+    letter-spacing: 5px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.about-title {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 40px;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+.about-title span { color: var(--primary); }
+
+.about-text {
+    color: #aaa;
+    line-height: 1.8;
+    font-size: 16px;
+    margin-bottom: 40px;
+}
+
+.about-features {
+    display: flex;
+    gap: 20px;
+}
+
+.feat-item {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 15px;
+    border-radius: 5px;
+    border-bottom: 2px solid var(--primary);
+}
+
+.about-image img {
+    width: 400px;
+    filter: drop-shadow(0 0 30px rgba(252, 238, 10, 0.2));
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Телефонға адаптация */
+@media (max-width: 850px) {
+    .about-container { flex-direction: column-reverse; text-align: center; }
+    .about-image img { width: 250px; }
+    .about-features { justify-content: center; flex-wrap: wrap; }
+}
+
+   </style>
+</head>
+<body>
+
+    <div id="preloader">
+    <div class="loader-content">
+        <h1 class="loader-logo">ALASH</h1>
+        <div class="loader-bar">
+            <div class="progress"></div>
+        </div>
+        <p class="loader-text">LOADING SYSTEM...</p>
+    </div>
+</div>
+
+<div class="video-bg-container">
+    <video autoplay muted loop playsinline class="video-bg">
+        <source src="images/bg_video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+    <div class="fixed-bg"></div>
+    
+
+    <header class="hero">
+        
+        <nav>
+    <div class="nav-container">
+        <img src="images/free fire1.png" class="nav-logo-img" alt="FF">
+        
+        <a href="#" class="logo">ALASH</a>
+        
+        <img src="images/booyah.png" class="nav-logo-img" alt="Garena">
+    </div>
+</nav>
+    </header>
+
+    <header class="hero">
+    <div class="hero-brand-wrap">
+        <h1 class="main-title">ALASH</h1>
+        <div class="main-subtitle">PREMIER FF SQUAD</div>
+    </div>
+</header>
+
+
+
+    <h2 style="font-family:'Syncopate'; font-size:14px; color:var(--primary); margin:40px 5% 20px; letter-spacing:3px; border-left:3px solid var(--primary); padding-left:15px;">ADMINISTRATION</h2>
+<div class="grid" id="vipGrid">
+    </div>
+
+<h2 style="font-family:'Syncopate'; font-size:14px; color:var(--primary); margin:40px 5% 20px; letter-spacing:3px; border-left:3px solid var(--primary); padding-left:15px;">GUILD MEMBERS</h2>
+
+    
+
+    <div class="filter-tabs">
+        <button class="f-btn active" onclick="filterP('all', this)">ОБЩИЙ</button>
+        <button class="f-btn" onclick="filterP('kv', this)">КВ</button>
+        <button class="f-btn" onclick="filterP('bo', this)">БО</button>
+        <button class="f-btn" onclick="filterP('sns', this)">СНС</button>
+        <button class="f-btn" onclick="filterP('ultra', this)">УЛЬТИМАТУМ</button>
+    </div>
+
+    
+
+    <div class="grid" id="rosterGrid"></div>
+
+    <div class="more-players-wrap">
+    <button id="loadMoreBtn" class="btn-more" onclick="loadMore()">ЕЩЕ</button>
+</div>
+
+    <div class="actions">
+        <button class="btn btn-y" onclick="openApp('ГИЛЬДИЮ')">ВСТУПИТЬ В ГИЛЬДИЮ</button>
+        <button class="btn btn-r" onclick="openApp('КВ')">ЗАЯВКА НА КВ ИГРОКА</button>
+    </div>
+    
+
+<section class="about-section" id="about">
+    <div class="about-container">
+        <div class="about-content">
+            <h4 class="about-label">КТО МЫ ТАКИЕ?</h4>
+            <h2 class="about-title">ALASH</h2>
+            <p class="about-text">
+                Мы — амбициозная киберспортивная организация, объединившая лучших игроков Казахстана. 
+                Наш путь начался с мечты создать не просто сквад, а крепкое братство, способное доминировать на профессиональной сцене Free Fire.
+                <br><br>
+                <b>ALASH</b> — это символ чести, единства и несокрушимой воли к победе. Мы не ищем легких путей, мы сами создаем историю.
+            </p>
+            <div class="about-features">
+                <div class="feat-item"><span>СКОРОСТЬ</span></div>
+                <div class="feat-item"><span>ТОЧНОСТЬ</span></div>
+                <div class="feat-item"><span>ЕДИНСТВО</span></div>
+            </div>
+        </div>
+        <div class="about-image">
+            <img src="images/logo_big.png" alt="Alash Logo" onerror="this.src='https://via.placeholder.com/400?text=ALASH+SQUAD'">
+        </div>
+    </div>
+</section>
+
+
+    <div class="modal" id="pModal">
+        <div class="modal-box">
+            <span class="close" onclick="closeP()">&times;</span>
+            <div class="m-img-side"><img id="m-img" src=""></div>
+            <div class="m-info-side">
+                <p id="m-role" style="color:var(--primary); font-size:10px; letter-spacing:2px;"></p>
+                <h2 id="m-nick" style="font-family:'Syncopate'; font-size:24px; margin-bottom:15px;"></h2>
+                <div class="stat-grid">
+                    <div class="st-item"><h4>K/D RATIO</h4><p id="m-kd"></p></div>
+                    <div class="st-item"><h4>WIN RATE</h4><p id="m-win"></p></div>
+                    <div class="st-item"><h4>DEVICE</h4><p id="m-dev"></p></div>
+                    <div class="st-item"><h4>CATEGORY</h4><p id="m-cat" style="text-transform:uppercase;"></p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="aModal">
+        <div class="modal-box" style="flex-direction:column; max-width:450px; padding:35px;">
+            <span class="close" onclick="closeA()">&times;</span>
+            
+            <div class="modal-brand">ALASH</div>
+            
+            <div id="rules">
+                <h2 style="color:var(--primary); font-family:'Syncopate'; font-size:12px; margin-bottom:15px; letter-spacing:2px;">ПРАВИЛА</h2>
+                <div id="rules-txt" style="font-size:13px; color:#ccc; line-height:1.7; margin-bottom:25px; border-left: 2px solid var(--primary); padding-left: 15px;"></div>
+                <button class="btn btn-y" onclick="showF()">Я СОГЛАСЕН</button>
+            </div>
+            
+            <div id="form" style="display:none;">
+                <h2 style="color:var(--primary); font-family:'Syncopate'; font-size:12px; margin-bottom:15px; letter-spacing:2px;">АНКЕТА</h2>
+                <input type="text" id="i-name" placeholder="Ваше Имя">
+                <input type="text" id="i-nick" placeholder="Игровой Ник">
+                <input type="text" id="i-id" placeholder="Ваш ID">
+                <input type="text" id="i-ph" placeholder="Номер WhatsApp">
+                <button class="btn btn-r" onclick="submitApp()">ОТПРАВИТЬ</button>
+            </div>
+        </div>
+    </div>
+
+
+    <section class="founder-section">
+    <div class="founder-container">
+        <div class="founder-photo">
+            <img src="images/player.jpg" alt="Founder" onerror="this.src='https://via.placeholder.com/500x700?text=DAMIR'">
+        </div>
+        
+        <div class="founder-text">
+            <h4 class="f-label">FOUNDER & CEO</h4>
+            <h2 class="f-name">DAMIR</h2>
+            <p class="f-desc">
+                Основатель и главный лидер киберспортивной организации <b>ALASH</b>. 
+                Человек, стоящий у истоков создания одного из самых перспективных эсквадов. 
+                Справедливость, железная дисциплина и постоянное развитие — это те ценности, на которых строится наш путь к вершине.
+            </p>
+            <div class="f-stats">
+                <div class="f-stat-item"><span>Опыт:</span> 5 лет</div>
+                <div class="f-stat-item"><span>Роль:</span> IGL / Sniper</div>
+            </div>
+            <div class="f-socials">
+                <p>Связь с лидером:</p>
+                <a href="https://t.me/your_telegram" class="f-link">TELEGRAM</a>
+                <a href="https://instagram.com/your_insta" class="f-link">INSTAGRAM</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="live-recruitment">
+    <div class="status-indicator">
+        <span class="dot"></span>
+        <span class="status-text">LIVE: RECRUITMENT OPEN</span>
+    </div>
+    <div class="slots-counter">
+        СВОБОДНЫХ МЕСТ: <span id="slot-count">7</span> / 50
+    </div>
+</div>
+
+
+<section class="pro-partners">
+    <p class="pro-label">OFFICIAL PARTNERS & TOOLS</p>
+    <div class="partner-row">
+        <img src="images/garena.png" alt="Garena">
+        <img src="images/free fire.png" alt="FF">
+        <img src="images/booyah.png" alt="Booyah">
+        <div class="partner-divider"></div>
+        <span class="partner-brand">ALASH</span>
+    </div>
+</section>
+
+
+
+<footer style="padding: 40px; text-align: center; color: #cccccc; font-size: 12px; font-family: 'Orbitron';">
+    &copy; 2026 ALASH. ALL RIGHTS RESERVED. DESIGNED BY DIORA IGNIS
+</footer>
+
+    <script>
+
+
+// 1. Сайт толық жүктелсе өшеді
+window.addEventListener('load', function() {
+    hidePreloader();
+});
+
+// 2. ЕСКЕРТУ: Егер 5 секунд ішінде жүктелмесе де, бәрібір өшсін (тұрып қалмауы үшін)
+setTimeout(function() {
+    hidePreloader();
+}, 5000); 
+
+function hidePreloader() {
+    const preloader = document.getElementById('preloader');
+    if (preloader && !preloader.classList.contains('loader-fade')) {
+        preloader.classList.add('loader-fade');
+        
+        // Өшкен соң басылмайтындай қылып жою
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 800); 
+    }
+}
+       
+      // БАСШЫЛАР БАЗАСЫ
+const admins = [
+    {id:'a1', nick:'DAMIR', role:'LEADER', cat:'kv', kd:'3.50', win:'85%', dev:'iPhone 15 Pro', img:'images/damir.jpg'},
+    {id:'a2', nick:'BOSS', role:'ВР. ЛИДЕР', cat:'kv', kd:'3.10', win:'75%', dev:'iPhone', img:'images/boss.jpg'},
+    {id:'a3', nick:'OFFICER_1', role:'ОФИЦЕР', cat:'sns', kd:'2.90', win:'65%', dev:'iPad', img:'images/off1.jpg'},
+    {id:'a4', nick:'OFFICER_2', role:'ОФИЦЕР', cat:'bo', kd:'2.70', win:'60%', dev:'RedMagic', img:'images/off2.jpg'}
+]; 
+       
+       // БАЗА ДАННЫХ - Мұнда 4-тен көп адам болса ғана "ЕЩЕ" батырмасы көрінеді
+        const players = [
+            {id:'damir', nick:'DAMIR', role:'FOUNDER / SNIPER', cat:'kv', kd:'3.50', win:'85%', dev:'iPhone 15 Pro', img:'images/player.jpg'},
+            {id:'esen', nick:'ALASH_ESEN', role:'RUSHER', cat:'sns', kd:'2.80', win:'65%', dev:'iPad Pro', img:'images/esen.jpg'},
+            {id:'khan', nick:'ALASH_KHAN', role:'SUPPORT', cat:'bo', kd:'2.10', win:'50%', dev:'RedMagic', img:'images/khan.jpg'},
+            {id:'ultra', nick:'ULTRA_BOY', role:'ULTIMATUM', cat:'ultra', kd:'4.50', win:'95%', dev:'PC', img:'images/ultra.jpg'},
+            // ТЕКСЕРУ ҮШІН 5-ШІ ОЙЫНШЫНЫ ҚОСЫП ҚОЙДЫМ (Сонда БАТЫРМА ШЫҒАДЫ)
+            {id:'test', nick:'TEST_PLAYER', role:'MEMBER', cat:'kv', kd:'2.0', win:'40%', dev:'Phone', img:'https://via.placeholder.com/500x750?text=5th+Player'}
+        ];
+
+        let visibleCount = 4; // СЕН СҰРАҒАНДАЙ БАСТАПҚЫДА 4 КАРТОЧКА
+        let currentFilteredPlayers = [...players]; 
+
+        const grid = document.getElementById('rosterGrid');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+
+// Админдерді экранға шығару
+function renderAdmins() {
+    const vGrid = document.getElementById('vipGrid');
+    if(!vGrid) return;
+    vGrid.innerHTML = '';
+    admins.forEach(p => {
+        vGrid.innerHTML += `
+            <div class="card" onclick="openAdminModal('${p.id}')">
+                <img src="${p.img}" class="p-img" onerror="this.src='https://via.placeholder.com/400x600?text=ADMIN'">
+                <div class="p-info">
+                    <p class="p-role admin">${p.role}</p>
+                    <h3 class="p-nick">${p.nick}</h3>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Админдерді басқанда модаль ашу
+function openAdminModal(id) {
+    const p = admins.find(x => x.id === id);
+    if(p) {
+        document.getElementById('m-nick').innerText = p.nick;
+        document.getElementById('m-role').innerText = p.role;
+        document.getElementById('m-kd').innerText = p.kd;
+        document.getElementById('m-win').innerText = p.win;
+        document.getElementById('m-dev').innerText = p.dev;
+        document.getElementById('m-cat').innerText = p.cat;
+        document.getElementById('m-img').src = p.img;
+        document.getElementById('pModal').style.display = 'flex';
+    }
+}
+
+// ОСЫНЫ ҚОСУДЫ ҰМЫТПА (renderCards-тың қасына):
+renderAdmins();
+
+
+        function renderCards() {
+            grid.innerHTML = '';
+            
+            // Тек 4 адамды кесіп алу
+            const toShow = currentFilteredPlayers.slice(0, visibleCount);
+            
+            toShow.forEach(p => {
+                grid.innerHTML += `
+                    <div class="card" onclick="openP('${p.id}')">
+                        <img src="${p.img}" class="p-img" onerror="this.src='https://via.placeholder.com/500x750?text=NO+PHOTO'">
+                        <div class="p-info">
+                            <p class="p-role">${p.role}</p>
+                            <h3 class="p-nick">${p.nick}</h3>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Егер тізімде 4-тен көп адам болса - БАТЫРМА КӨРІНЕДІ
+            if (currentFilteredPlayers.length > visibleCount) {
+                loadMoreBtn.style.display = 'block';
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+        }
+
+        function loadMore() {
+            visibleCount += 4; // Басқан сайын +4 адам қосылады
+            renderCards();
+        }
+
+        function filterP(c, b) {
+            visibleCount = 4; // Категория ауысқанда қайтадан 4-ке түседі
+            document.querySelectorAll('.f-btn').forEach(btn => btn.classList.remove('active'));
+            b.classList.add('active');
+            
+            currentFilteredPlayers = c === 'all' ? players : players.filter(p => p.cat === c);
+            renderCards();
+        }
+
+        // Сайт ашылғанда іске қосу
+        renderCards();
+
+        // --- Қалған функциялар өзгеріссіз қалады (openP, closeP т.б.) ---
+        function openP(id) {
+            const p = players.find(x => x.id === id);
+            document.getElementById('m-nick').innerText = p.nick;
+            document.getElementById('m-role').innerText = p.role;
+            document.getElementById('m-kd').innerText = p.kd;
+            document.getElementById('m-win').innerText = p.win;
+            document.getElementById('m-dev').innerText = p.dev;
+            document.getElementById('m-cat').innerText = p.cat;
+            document.getElementById('m-img').src = p.img;
+            document.getElementById('pModal').style.display = 'flex';
+        }
+        function closeP() { document.getElementById('pModal').style.display = 'none'; }
+
+        function openApp(t) {
+            const rulesText = t === 'ГИЛЬДИЮ' ? 
+                '1. Лвл 60+ <br> 2. КД 2.5+ <br> 3. Смена ника <br> 4. Адекватность и актив' : 
+                '1. Опыт КВ турниров <br> 2. КД 3.5+ <br> 3. Наличие микрофона <br> 4. Тестовый бой';
+            
+            document.getElementById('rules-txt').innerHTML = rulesText;
+            document.getElementById('aModal').style.display = 'flex';
+            document.getElementById('rules').style.display = 'block';
+            document.getElementById('form').style.display = 'none';
+        }
+        function showF() { document.getElementById('rules').style.display = 'none'; document.getElementById('form').style.display = 'block'; }
+        function closeA() { document.getElementById('aModal').style.display = 'none'; }
+      function submitApp() {
+    // 1. Формадағы деректерді жинаймыз
+    const name = document.getElementById('i-name').value;
+    const nick = document.getElementById('i-nick').value;
+    const gameId = document.getElementById('i-id').value;
+    const phone = document.getElementById('i-ph').value;
+
+    // 2. Егер барлық жер толтырылмаса, ескерту жасау
+    if(!name || !nick || !gameId || !phone) {
+        alert('Пожалуйста, заполните все поля!');
+        return;
+    }
+
+    // 3. Сенің Ватсап номерің (Осы жерге өз номеріңді жаз, тек сандармен)
+    const myNumber = "77712730203"; // Мысалы: 7707...
+
+    // 4. Хабарламаның мәтінін дайындаймыз
+    const message = ` *НОВАЯ ЗАЯВКА В ALASH*%0A%0A` +
+                    `*Имя:* ${name}%0A` +
+                    `*Ник:* ${nick}%0A` +
+                    `*ID:* ${gameId}%0A` +
+                    `*WhatsApp:* ${phone}`;
+
+    // 5. Ватсап сілтемесін құрастырып, чатты ашамыз
+    const whatsappUrl = `https://wa.me/${myNumber}?text=${message}`;
+    
+    // Жаңа терезеде Ватсапты ашу
+    window.open(whatsappUrl, '_blank');
+
+    // Модальканы жабу
+    closeA();
+}
+        window.onclick = function(e) { if(e.target.className === 'modal') { closeP(); closeA(); } }
+
+
+        window.addEventListener('scroll', function() {
+    const section = document.querySelector('.founder-section');
+    if(!section) return;
+    const position = section.getBoundingClientRect().top;
+    const screenHeight = window.innerHeight;
+
+    if (position < screenHeight * 0.85) {
+        section.classList.add('visible');
+    }
+});
+
+
+    </script>
+</body>
+</html> 
